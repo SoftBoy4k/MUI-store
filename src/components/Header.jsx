@@ -1,9 +1,9 @@
 import { ShoppingBasket } from '@mui/icons-material';
-import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Badge, IconButton, Toolbar, Typography } from '@mui/material';
 
-export default function Header() {
+export default function Header({count, openDrawer}) {
     return (
-        <AppBar position='static'>
+        <AppBar position='sticky' sx={{top: 0}}>
             <Toolbar>
                 <Typography sx={{flexGrow: 1}}>
                     MUI store
@@ -12,8 +12,11 @@ export default function Header() {
                     size='large'
                     edge="start"
                     color='inherit'
-                >
-                    <ShoppingBasket/>
+                    onClick={() => openDrawer()}
+                >   
+                    <Badge badgeContent={count} color="secondary">
+                        <ShoppingBasket/>
+                    </Badge>
                 </IconButton>
             </Toolbar>
         </AppBar>

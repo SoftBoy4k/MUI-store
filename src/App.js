@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 import { useState } from "react";
+import Basket from "./components/Basket";
 import GoodsList from "./components/GoodsList";
 import Header from "./components/Header";
 import Search from "./components/Search";
@@ -8,7 +9,11 @@ import { goods } from "./data/goods";
 
 export default function App() {
 
-	let [searchValue, setSearchValue] = useState("");
+	const [searchValue, setSearchValue] = useState("");
+	const [numberOfGoods, setNumberOfGoods] = useState(0);
+	const [selectedProducts, setSelectedProducts] = useState([]);
+	const [isOpen, setIsOpen] = useState(false);
+
 
 	const changeSearchValue = (e) => {
 		setSearchValue(e.target.value);
@@ -23,13 +28,30 @@ export default function App() {
 		}
 	}
 
+	const addNumberOfGoods = () => {
+		setNumberOfGoods(prevCount => prevCount + 1)
+	}
+
+	const removeNumberOfGoods = () => {
+		setNumberOfGoods(prevCount => prevCount - 1)
+	}
+
+	const selectProduct = (product) => {
+		setSelectedProducts(prevProducts => [...prevProducts, ...product])
+	}
+
+	const removeProduct = (id) => {
+		setSelectedProducts(prevProducts => prevProducts.filter(el => el.id !== id))
+	}
+
 	return (
-		<>
-			<Header/>
+		<> 
+			<Header count={numberOfGoods} openDrawer={() => setIsOpen(true)}/>
 			<Container maxWidth="md">
 				<Search onChange={changeSearchValue} value={searchValue}/>
-				<GoodsList goods = {getSearchElements()}/>
+				<GoodsList goods={getSearchElements()} addNumberOfGoods={addNumberOfGoods} selectProduct={selectProduct}/>
 			</Container>
+			<Basket isOpen={isOpen} closeDrawer={() => setIsOpen(false)} removeNumberOfGoods={removeNumberOfGoods} selectedProducts={selectedProducts} removeFromBasket={removeProduct}/>
 		</>
 	);
 }
